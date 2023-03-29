@@ -20,7 +20,7 @@ const handleSelect = (key, keyPath) => {
             router
         >
           <!-- <div class="block1"> -->
-          <el-menu-item>首页</el-menu-item>
+          <el-menu-item index="home">首页</el-menu-item>
           <!-- </div> -->
 
 
