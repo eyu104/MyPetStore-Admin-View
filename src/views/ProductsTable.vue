@@ -1,128 +1,109 @@
 <template>
-  <div style="margin-bottom: 20px">
-    <el-row>
-      <el-col :span="3">
-        <el-input v-model="search" placeholder="输入关键值" />
-      </el-col>
 
-      <el-col :span="2">
-        <el-button>查询</el-button>
-      </el-col>
-      <el-col :span="3">
-        <el-button @click="dialogVisible = true">新增</el-button>
-      </el-col>
-    </el-row>
-  </div>
+  <div style="padding: 10px">
 
-  <div>
-    <el-table :data="tableData" border style="width: 100%" height="70vh">
-      <el-table-column prop="username" label="用户名" width="180" />
-      <el-table-column prop="password" label="密码" width="180" />
-      <el-table-column prop="Email" label="邮箱" />
-      <el-table-column label="操作">
+    <div style="margin: 10px 0">
+      <el-input  v-model="search" placeholder="请输入" style="width: 30%"></el-input>
+      <el-button style="margin-left: 10px">查询</el-button><el-button>新增</el-button>
+    </div>
+
+    <el-table :data="tableData" style="width: 100%" max-height="100vh" stripe border>
+      <el-table-column prop="commodityID" label="商品ID" width="200" sortable/>
+      <el-table-column prop="productID" label="产品ID" width="200" sortable/>
+      <el-table-column prop="describe" label="描述" />
+      <el-table-column prop="price" label="价格" width="180" />
+      <el-table-column fixed="right" label="操作" width="180">
+
         <template #default="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
-          >Edit
-          </el-button>
-          <el-button
-              size="small"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-          >Delete
-          </el-button>
+
+          <el-button type="primary" @click="handleEdit(scope.$index,scope.row)"  >编辑</el-button>
+
+          <el-popconfirm
+              confirm-button-text="是"
+              cancel-button-text="否"
+              :icon="InfoFilled"
+              icon-color="#626AEF"
+              title="确定删除？"
+          >
+            <template #reference>
+              <el-button type="danger" @click="handleDel(scope.$index,scope.row)" >删除</el-button>
+            </template>
+          </el-popconfirm>
+
         </template>
       </el-table-column>
     </el-table>
-    <div style="margin-top: 20px">
+
+    <div style="margin: 10px 0">
       <el-pagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :page-sizes="[10, 20, 30, 40]"
-          :small="small"
-          :disabled="disabled"
-          :background="background"
+          :current-page="currentPage"
+          :page-size="10"
+          :page-sizes="[5, 10, 20]"
+          background
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
       />
     </div>
+
   </div>
 
-  <el-dialog
-      v-model="dialogVisible"
-      title="Tips"
-      width="30%"
-      :before-close="handleClose"
-  >
-    <span>This is a message</span>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="dialogVisible = false">
-          Confirm
-        </el-button>
-      </span>
-    </template>
-  </el-dialog>
 </template>
 
-<script lang="ts">
+<script>
 
-
+import {Search} from '@element-plus/icons-vue';
 export default {
+  name: "productsTable",
+
 
   data() {
     return {
-      tableData: [],
-      currentPage:1,
-      pageSize:10,
-      small:false,
-      background:false,
-      disabled:false,
-      total:0,
-      form:{
-        username:'',
-        password:'',
-        Email:'',
-      },
-      dialogVisible:false,
-      search:'',
+
+      search: '',
+
+      currentPage: 1,
+
+      total: 10,
+
+      tableData: [
+        {
+          commodityID: 'asd',
+          productID: 'zxc',
+          describe: 'No. 189, Grove St, Los Angeles',
+          price: '1000',
+        },
+
+        {
+          commodityID: 'asd',
+          productID: 'zxc',
+          describe: 'No. 189, Grove St, Los Angeles',
+          price: '1000',
+        },
+
+      ]
     }
   },
-  created() {
-    this.load();
-  },
+  methods: {
+    handleDel: '',
 
-  methods:{
-    load(){
+    handleEdit: '',
 
-    },
-    save(){
+    handleSizeChange() {
 
     },
-    add(){
 
-    },
-    handleEdit(row){
-
-    },
-    handleDelete(){
-
-    },
-    handleSizeChange(pageSize)
-    {
-      this.pageSize=pageSize;
-      this.load();
-    },
-    handleCurrentChange(currentPage)
-    {
-      this.currentPage=currentPage;
-      this.load();
-    },
-    handleClose(){
+    handleCurrentChange() {
 
     }
-  },
+  }
 }
+
+
+
 </script>
+
+<style scoped>
+
+</style>
