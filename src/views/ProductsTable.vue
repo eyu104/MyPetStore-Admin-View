@@ -4,7 +4,7 @@
 
     <div style="margin: 10px 0">
 
-      <el-select v-model="value" class="m-2" placeholder="展现种类" style="width: 120px">
+      <el-select v-model="form.category" class="m-2" placeholder="展现种类" style="width: 120px">
         <el-option
             v-for="item in options"
             :key="item.value"
@@ -36,10 +36,6 @@
           <el-input v-model="form.productID" style="width: 50%;"/>
         </el-form-item>
 
-        <el-form-item label="名称" >
-          <el-input v-model="form.name" style="width: 50%;"/>
-        </el-form-item>
-
         <el-form-item label="种类" >
           <el-select v-model="form.category" class="m-2" placeholder="请选择" style="width: 50%;">
             <el-option
@@ -51,13 +47,30 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="名称" >
+          <el-input v-model="form.name" style="width: 50%;"/>
+        </el-form-item>
+
         <el-form-item label="描述" >
           <el-input v-model="form.describe" style="width: 80%;"/>
+        </el-form-item>
+
+        <el-form-item label="供应商" >
+          <el-input v-model="form.supplier" style="width: 80%;"/>
+        </el-form-item>
+
+        <el-form-item label="状态" >
+          <el-input v-model="form.status" style="width: 30%;"/>
         </el-form-item>
 
         <el-form-item label="价格" >
           <el-input v-model="form.price" style="width: 30%;"/>
         </el-form-item>
+
+        <el-form-item label="成本" >
+          <el-input v-model="form.cost" style="width: 30%;"/>
+        </el-form-item>
+
 
         <el-form-item label="图片" >
 
@@ -121,12 +134,15 @@
     </el-dialog>
 
     <el-table :data="tableData" style="width: 100%" max-height="100vh" stripe border>
-      <el-table-column prop="commodityID" label="商品ID" width="180" sortable/>
-      <el-table-column prop="productID" label="产品ID" width="180" sortable/>
-      <el-table-column prop="category" label="种类" width="180" />
-      <el-table-column prop="name" label="名称" width="180" />
+      <el-table-column prop="commodityID" label="商品ID" width="120" sortable/>
+      <el-table-column prop="productID" label="产品ID" width="120" sortable/>
+      <el-table-column prop="category" label="种类" width="120" />
+      <el-table-column prop="name" label="名称" width="120" />
       <el-table-column prop="describe" label="描述" />
-      <el-table-column prop="price" label="价格" width="180" />
+      <el-table-column prop="supplier" label="供应商" width="180"/>
+      <el-table-column prop="status" label="状态" width="150"/>
+      <el-table-column prop="cost" label="成本" width="120"/>
+      <el-table-column prop="price" label="价格" width="120" />
       <el-table-column fixed="right" label="操作" width="180">
 
         <template #default="scope">
@@ -162,10 +178,6 @@
           <el-input v-model="form.productID" style="width: 50%;"/>
         </el-form-item>
 
-        <el-form-item label="名称" >
-          <el-input v-model="form.name" style="width: 50%;"/>
-        </el-form-item>
-
         <el-form-item label="种类" >
           <el-select v-model="form.category" class="m-2" placeholder="请选择" style="width: 50%;">
             <el-option
@@ -177,13 +189,30 @@
           </el-select>
         </el-form-item>
 
+        <el-form-item label="名称" >
+          <el-input v-model="form.name" style="width: 50%;"/>
+        </el-form-item>
+
         <el-form-item label="描述" >
           <el-input v-model="form.describe" style="width: 80%;"/>
+        </el-form-item>
+
+        <el-form-item label="供应商" >
+          <el-input v-model="form.supplier" style="width: 80%;"/>
+        </el-form-item>
+
+        <el-form-item label="状态" >
+          <el-input v-model="form.status" style="width: 30%;"/>
         </el-form-item>
 
         <el-form-item label="价格" >
           <el-input v-model="form.price" style="width: 30%;"/>
         </el-form-item>
+
+        <el-form-item label="成本" >
+          <el-input v-model="form.cost" style="width: 30%;"/>
+        </el-form-item>
+
 
         <el-form-item label="图片" >
 
@@ -254,6 +283,9 @@ export default {
           productID: 'zxc',
           category:'',
           name:'',
+          cost:'',
+          supplier:'',
+          status:'',
           describe: 'No. 189, Grove St, Los Angeles',
           price: '1000',
         },
@@ -263,6 +295,9 @@ export default {
           productID: 'zxc',
           category:'',
           name:'',
+          cost:'',
+          supplier:'',
+          status:'',
           describe: 'No. 189, Grove St, Los Angeles',
           price: '1000',
         },
