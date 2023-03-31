@@ -147,6 +147,10 @@
           <el-input v-model="form.name" style="width: 50%;"/>
         </el-form-item>
 
+        <el-form-item label="名称" >
+          <el-input v-model="form.name" style="width: 50%;"/>
+        </el-form-item>
+
         <el-form-item label="种类" >
           <el-select v-model="value" class="m-2" placeholder="请选择" style="width: 50%;">
             <el-option
