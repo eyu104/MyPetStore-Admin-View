@@ -29,11 +29,11 @@
       <el-form model="form" label-width="120px">
 
         <el-form-item label="商品ID" >
-          <el-input v-model="form.name" style="width: 50%;"/>
+          <el-input v-model="form.commodityID" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="产品ID" >
-          <el-input v-model="form.name" style="width: 50%;"/>
+          <el-input v-model="form.productID" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="名称" >
@@ -41,7 +41,7 @@
         </el-form-item>
 
         <el-form-item label="种类" >
-          <el-select v-model="value" class="m-2" placeholder="请选择" style="width: 50%;">
+          <el-select v-model="form.category" class="m-2" placeholder="请选择" style="width: 50%;">
             <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -52,11 +52,26 @@
         </el-form-item>
 
         <el-form-item label="描述" >
-          <el-input v-model="form.name" style="width: 80%;"/>
+          <el-input v-model="form.describe" style="width: 80%;"/>
         </el-form-item>
 
         <el-form-item label="价格" >
-          <el-input v-model="form.name" style="width: 30%;"/>
+          <el-input v-model="form.price" style="width: 30%;"/>
+        </el-form-item>
+
+        <el-form-item label="图片" >
+
+          <el-upload
+              class="avatar-uploader"
+              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+
         </el-form-item>
 
       </el-form>
@@ -73,12 +88,12 @@
     <el-dialog v-model="categoryVisible" title="新增种类" width="30%">
       <el-form :model="form" label-width="120px">
 
-        <el-form-item label="catid" >
-          <el-input v-model="form.name" style="width: 50%;"/>
+        <el-form-item label="cateid" >
+          <el-input v-model="form.cateid" style="width: 50%;"/>
         </el-form-item>
 
-        <el-form-item label="name" >
-          <el-input v-model="form.name" style="width: 50%;"/>
+        <el-form-item label="catename" >
+          <el-input v-model="form.catename" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="图片" >
@@ -140,11 +155,11 @@
       <el-form model="form" label-width="120px">
 
         <el-form-item label="商品ID" >
-          <el-input v-model="form.name" style="width: 50%;"/>
+          <el-input v-model="form.commodityID" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="产品ID" >
-          <el-input v-model="form.name" style="width: 50%;"/>
+          <el-input v-model="form.productID" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="名称" >
@@ -152,7 +167,7 @@
         </el-form-item>
 
         <el-form-item label="种类" >
-          <el-select v-model="value" class="m-2" placeholder="请选择" style="width: 50%;">
+          <el-select v-model="form.category" class="m-2" placeholder="请选择" style="width: 50%;">
             <el-option
                 v-for="item in options"
                 :key="item.value"
@@ -163,11 +178,26 @@
         </el-form-item>
 
         <el-form-item label="描述" >
-          <el-input v-model="form.name" style="width: 80%;"/>
+          <el-input v-model="form.describe" style="width: 80%;"/>
         </el-form-item>
 
         <el-form-item label="价格" >
-          <el-input v-model="form.name" style="width: 30%;"/>
+          <el-input v-model="form.price" style="width: 30%;"/>
+        </el-form-item>
+
+        <el-form-item label="图片" >
+
+          <el-upload
+              class="avatar-uploader"
+              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"
+          >
+            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          </el-upload>
+
         </el-form-item>
 
       </el-form>
@@ -201,6 +231,8 @@
 
 export default {
   name: "productsTable",
+  cateid:'',
+  catename:'',
 
   data() {
     return {
@@ -220,6 +252,8 @@ export default {
         {
           commodityID: 'asd',
           productID: 'zxc',
+          category:'',
+          name:'',
           describe: 'No. 189, Grove St, Los Angeles',
           price: '1000',
         },
@@ -227,6 +261,8 @@ export default {
         {
           commodityID: 'asd',
           productID: 'zxc',
+          category:'',
+          name:'',
           describe: 'No. 189, Grove St, Los Angeles',
           price: '1000',
         },
