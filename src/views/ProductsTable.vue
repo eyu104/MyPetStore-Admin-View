@@ -23,7 +23,6 @@
 
     </div>
 
-
 <!--    新增商品-->
     <el-dialog v-model="addVisible" title="新增商品" width="30%">
       <el-form model="form" label-width="120px">
