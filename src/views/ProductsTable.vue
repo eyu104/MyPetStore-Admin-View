@@ -50,6 +50,10 @@
           <el-input v-model="form.name" style="width: 50%;"/>
         </el-form-item>
 
+        <el-form-item label="数量" >
+          <el-input v-model="form.number" style="width: 50%;"/>
+        </el-form-item>
+
         <el-form-item label="描述" >
           <el-input v-model="form.describe" style="width: 80%;"/>
         </el-form-item>
@@ -137,6 +141,7 @@
       <el-table-column prop="commodityID" label="商品ID" width="120" sortable/>
       <el-table-column prop="productID" label="产品ID" width="120" sortable/>
       <el-table-column prop="category" label="种类" width="120" />
+      <el-table-column prop="number" label="数量" width="60" />
       <el-table-column prop="name" label="名称" width="120" />
       <el-table-column prop="describe" label="描述" />
       <el-table-column prop="supplier" label="供应商" width="180"/>
@@ -190,6 +195,10 @@
 
         <el-form-item label="名称" >
           <el-input v-model="form.name" style="width: 50%;"/>
+        </el-form-item>
+
+        <el-form-item label="数量" >
+          <el-input v-model="form.number" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="描述" >
@@ -283,6 +292,7 @@ export default {
           productID: 'zxc',
           category:'',
           name:'',
+          number:'',
           cost:'',
           supplier:'',
           status:'',
@@ -295,6 +305,7 @@ export default {
           productID: 'zxc',
           category:'',
           name:'',
+          number:'',
           cost:'',
           supplier:'',
           status:'',
