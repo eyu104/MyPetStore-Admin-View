@@ -132,6 +132,7 @@
       </template>
     </el-dialog>
 
+<!--    表格-->
     <el-table :data="tableData" style="width: 100%" max-height="100vh" stripe border>
       <el-table-column prop="commodityID" label="商品ID" width="120" sortable/>
       <el-table-column prop="productID" label="产品ID" width="120" sortable/>
@@ -163,7 +164,6 @@
         </template>
       </el-table-column>
     </el-table>
-
 
 <!--    编辑商品-->
     <el-dialog v-model="EditVisible" title="编辑商品" width="30%">
@@ -238,6 +238,7 @@
       </template>
     </el-dialog>
 
+<!--    分页-->
     <div style="margin: 10px 0">
       <el-pagination
           :current-page="currentPage"
