@@ -199,9 +199,6 @@
 
 <script lang="ts">
 
-import {Search} from '@element-plus/icons-vue';
-
-
 export default {
   name: "productsTable",
 
