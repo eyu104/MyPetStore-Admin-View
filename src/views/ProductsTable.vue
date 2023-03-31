@@ -25,7 +25,7 @@
 
 
 <!--    新增商品-->
-    <el-dialog v-model="addVisible" title="新增" width="30%">
+    <el-dialog v-model="addVisible" title="新增商品" width="30%">
       <el-form model="form" label-width="120px">
 
         <el-form-item label="商品ID" >
@@ -33,6 +33,10 @@
         </el-form-item>
 
         <el-form-item label="产品ID" >
+          <el-input v-model="form.name" style="width: 50%;"/>
+        </el-form-item>
+
+        <el-form-item label="名称" >
           <el-input v-model="form.name" style="width: 50%;"/>
         </el-form-item>
 
