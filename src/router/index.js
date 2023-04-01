@@ -6,7 +6,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Layout',
+      name: 'home',
       component: Layout,
       redirect:"/home",
       children:[
@@ -26,7 +26,7 @@ const router = createRouter({
         {
           path:'/accountTable',
           name:'accountTable',
-          component:()=>import('../views/AccountTable.vue')
+          component:()=>import('../views/OrderTable2.vue')
         }
       ]
     },
@@ -43,6 +43,7 @@ const router = createRouter({
         }
       ]
     },
+
 
     {
       path: '/productsTable',

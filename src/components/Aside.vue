@@ -42,8 +42,8 @@ const handleSelect = (key, keyPath) => {
             <el-icon><location /></el-icon>
             <span>表格列表</span>
           </template>
-            <el-menu-item index="accountTable">用户列表</el-menu-item>
-            <el-menu-item index="orderTable">账单列表</el-menu-item>
+            <el-menu-item index="accountTable">已发货订单列表</el-menu-item>
+            <el-menu-item index="orderTable">未发货订单列表</el-menu-item>
             <el-menu-item index="productsTable">商品列表</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="2">
