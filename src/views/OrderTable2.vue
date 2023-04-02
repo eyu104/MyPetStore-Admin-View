@@ -49,7 +49,7 @@
         <el-table-column prop="status" label="进度"/>
       </el-table-column>
       <el-table-column label="商品信息" align="center">
-      <el-table-column label="总价" prop="totalPrice"/>
+        <el-table-column label="总价" prop="totalPrice"/>
       </el-table-column>
       <el-table-column label="操作" fixed="right" width="240">
         <template #default="scope">
@@ -61,9 +61,6 @@
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
           >删除
-          </el-button>
-          <el-button type="small" @click="sendOut(scope.row)">
-            发货
           </el-button>
         </template>
       </el-table-column>
@@ -85,34 +82,34 @@
   </div>
 
   <el-dialog
-      v-model="dialogVisible"
-      title="修改订单"
-      width="80%"
-      :before-close="handleClose"
-  >
-    <el-form
-        :model="ruleForm"
-        ref="ruleForm"
-        label-position="right"
-    >
-      <el-collapse v-model="activeNames" accordion>
-        <el-collapse-item title="基本信息" name="1" >
-          <el-form-item label="订单编号" label-width="100px" prop="orderId">
-            <el-input
-                type="text"
-                autocomplete="off"
-                v-model="ruleForm.orderId"
-                placeholder="请输入订单编号"
-                prefix-icon="el-icon-user-solid"
-                class="my-input"
-            ></el-input>
-          </el-form-item>
-          <el-form-item label="支付卡类型" label-width="100px" prop="cardType">
-            <el-input
-                type="text"
-                autocomplete="off"
-                v-model="ruleForm.cardType"
-                placeholder="请输入支付卡类型"
+              v-model="dialogVisible"
+              title="修改订单"
+              width="80%"
+              :before-close="handleClose"
+          >
+            <el-form
+                :model="ruleForm"
+                ref="ruleForm"
+                label-position="right"
+            >
+              <el-collapse v-model="activeNames" accordion>
+                <el-collapse-item title="基本信息" name="1" >
+                  <el-form-item label="订单编号" label-width="100px" prop="orderId">
+                    <el-input
+                        type="text"
+                        autocomplete="off"
+                        v-model="ruleForm.orderId"
+                        placeholder="请输入订单编号"
+                        prefix-icon="el-icon-user-solid"
+                        class="my-input"
+                    ></el-input>
+                  </el-form-item>
+                  <el-form-item label="支付卡类型" label-width="100px" prop="cardType">
+                    <el-input
+                        type="text"
+                        autocomplete="off"
+                        v-model="ruleForm.cardType"
+                        placeholder="请输入支付卡类型"
                 prefix-icon="el-icon-user-solid"
                 class="my-input"
             ></el-input>
@@ -458,15 +455,32 @@ export default {
   },
 
   methods:{
-    sendOut(row)
-    {
-      console.log(row);
-      console.log(row.orderId);
-      request.post('/order/ship',row).then(resp=>{
+    interOrder(row){
+      console.log(row.lineItems);
+      this.itemData=row.lineItems;
+      this.dialogVisible1=true;
+    },
+    load(){
+      request.get('/order/get',{
+        params:{
+          pageNum:this.currentPage,
+          pageSize:this.pageSize,
+          supplierId:1,
+        }
+      }).then(resp=>{
+        console.log(resp);
+        this.tableData=resp.data.records;
+        this.FilterTableData=this.tableData.filter((data)=>data.status==='Q');
+        this.tableData=this.FilterTableData;
+        this.total=this.tableData.length;
+      })
+    },
+    save(){
+      request.post('/order/update',this.ruleForm).then(resp=>{
         if(resp.code==='0')
         {this.$message({
           type:'success',
-          message:"发货成功"
+          message:'更新成功'
         })
           this.load();
           this.dialogVisible=false;
@@ -480,46 +494,6 @@ export default {
         }
       })
     },
-
-    interOrder(row){
-      console.log(row.lineItems);
-      this.itemData=row.lineItems;
-      this.dialogVisible1=true;
-    },
-    load(){
-        request.get('/order/get',{
-          params:{
-            pageNum:this.currentPage,
-            pageSize:this.pageSize,
-            supplierId:1,
-          }
-        }).then(resp=>{
-          console.log(resp);
-          this.tableData=resp.data.records;
-          this.FilterTableData=this.tableData.filter((data)=>data.status==='P');
-          this.tableData=this.FilterTableData;
-          this.total=this.tableData.length;
-        })
-    },
-    save(){
-        request.post('/order/update',this.ruleForm).then(resp=>{
-          if(resp.code==='0')
-          {this.$message({
-            type:'success',
-            message:'更新成功'
-          })
-            this.load();
-            this.dialogVisible=false;
-          }
-          else
-          {
-            this.$message({
-              type:'error',
-              message:resp.msg
-            })
-          }
-        })
-      },
     handleEdit(row){
       this.ruleForm=JSON.parse(JSON.stringify(row));
       console.log(this.ruleForm);
@@ -567,7 +541,7 @@ export default {
       this.dialogVisible=false;
       this.dialogVisible1=false;
     }
-    },
+  },
 
 }
 </script>
