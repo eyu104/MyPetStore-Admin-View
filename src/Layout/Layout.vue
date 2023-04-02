@@ -1,16 +1,16 @@
 <template>
   <div>
   <el-container>
-    <el-aside width="20vw">
+    <el-aside width="15vw">
       <Aside/>
     </el-aside>
 
-  <el-container style="width: 60%">
-    <el-header>
+  <el-container >
+    <el-header >
       <Header />
     </el-header>
     <el-main>
-      <div class="main">
+      <div class="main" style="width: 80vw">
         <RouterView />
       </div>
     </el-main>

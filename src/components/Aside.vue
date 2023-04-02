@@ -20,7 +20,7 @@ const handleSelect = (key, keyPath) => {
 </script>
 
 <template>
-  <el-row class="tac">
+  <el-row class="tac" style="width: 15vw">
     <el-col :span="24" style="background-color: #1F8D94B3">
       <div style="color: white;text-align: center">
       <h2><b>Pet</b>&nbspStore Admin</h2>

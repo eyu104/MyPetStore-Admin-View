@@ -13,9 +13,9 @@
         />
       </el-select>
 
-      <el-input  v-model="search" placeholder="请输入关键字" style="width: 30%;margin-left: 10px"></el-input>
+      <el-input  v-model="search" placeholder="请输入产品ID" style="width: 200px;margin-left: 10px"></el-input>
 
-      <el-button style="margin-left: 10px">查询</el-button>
+      <el-button style="margin-left: 10px" @click="load">查询</el-button>
 
       <el-button @click="addcategory" style="margin-left: 10px" >新增种类</el-button>
 
@@ -28,11 +28,11 @@
       <el-form model="form" label-width="120px">
 
         <el-form-item label="商品ID" >
-          <el-input v-model="form.commodityID" style="width: 50%;"/>
+          <el-input v-model="form.commodityId" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="产品ID" >
-          <el-input v-model="form.productID" style="width: 50%;"/>
+          <el-input v-model="form.productId" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="种类" >
@@ -51,11 +51,15 @@
         </el-form-item>
 
         <el-form-item label="数量" >
-          <el-input v-model="form.number" style="width: 50%;"/>
+          <el-input v-model="form.quantity" style="width: 50%;"/>
         </el-form-item>
 
-        <el-form-item label="描述" >
+        <el-form-item label="产品描述" >
           <el-input v-model="form.describe" style="width: 80%;"/>
+        </el-form-item>
+
+        <el-form-item label="商品描述" >
+          <el-input v-model="form.describe2" style="width: 80%;"/>
         </el-form-item>
 
         <el-form-item label="供应商" >
@@ -95,7 +99,7 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="addVisible = false">取消</el-button>
-        <el-button type="primary" @click="addVisible = false">确认</el-button>
+        <el-button type="primary" @click="saveitem">确认</el-button>
       </span>
       </template>
     </el-dialog>
@@ -105,11 +109,11 @@
       <el-form :model="form" label-width="120px">
 
         <el-form-item label="cateid" >
-          <el-input v-model="form.cateid" style="width: 50%;"/>
+          <el-input v-model="form.cateId" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="catename" >
-          <el-input v-model="form.catename" style="width: 50%;"/>
+          <el-input v-model="form.cateName" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="图片" >
@@ -131,23 +135,24 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="categoryVisible = false">取消</el-button>
-        <el-button type="primary" @click="categoryVisible = false">确认</el-button>
+        <el-button type="primary" @click="savecategory">确认</el-button>
       </span>
       </template>
     </el-dialog>
 
 <!--    表格-->
     <el-table :data="tableData" style="width: 100%" max-height="100vh" stripe border>
-      <el-table-column prop="commodityID" label="商品ID" width="120" sortable/>
-      <el-table-column prop="productID" label="产品ID" width="120" sortable/>
+      <el-table-column prop="itemId" label="商品ID" width="120" sortable/>
+      <el-table-column prop="productId" label="产品ID" width="120" sortable/>
       <el-table-column prop="category" label="种类" width="120" />
-      <el-table-column prop="number" label="数量" width="60" />
+      <el-table-column prop="quantity" label="数量" width="60" />
       <el-table-column prop="name" label="名称" width="120" />
-      <el-table-column prop="describe" label="描述" />
+      <el-table-column prop="describe" label="产品描述" />
+      <el-table-column prop="attr1" label="商品描述" />
       <el-table-column prop="supplier" label="供应商" width="180"/>
       <el-table-column prop="status" label="状态" width="150"/>
-      <el-table-column prop="cost" label="成本" width="120"/>
-      <el-table-column prop="price" label="价格" width="120" />
+      <el-table-column prop="unitCost" label="成本" width="120"/>
+      <el-table-column prop="listPrice" label="价格" width="120" />
       <el-table-column fixed="right" label="操作" width="180">
 
         <template #default="scope">
@@ -175,11 +180,11 @@
       <el-form model="form" label-width="120px">
 
         <el-form-item label="商品ID" >
-          <el-input v-model="form.commodityID" style="width: 50%;"/>
+          <el-input v-model="form.commodityId" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="产品ID" >
-          <el-input v-model="form.productID" style="width: 50%;"/>
+          <el-input v-model="form.productId" style="width: 50%;"/>
         </el-form-item>
 
         <el-form-item label="种类" >
@@ -198,11 +203,15 @@
         </el-form-item>
 
         <el-form-item label="数量" >
-          <el-input v-model="form.number" style="width: 50%;"/>
+          <el-input v-model="form.quantity" style="width: 50%;"/>
         </el-form-item>
 
-        <el-form-item label="描述" >
+        <el-form-item label="产品描述" >
           <el-input v-model="form.describe" style="width: 80%;"/>
+        </el-form-item>
+
+        <el-form-item label="商品描述" >
+          <el-input v-model="form.describe2" style="width: 80%;"/>
         </el-form-item>
 
         <el-form-item label="供应商" >
@@ -242,7 +251,7 @@
       <template #footer>
       <span class="dialog-footer">
         <el-button @click="EditVisible = false">取消</el-button>
-        <el-button type="primary" @click="EditVisible = false">确认</el-button>
+        <el-button type="primary" @click="saveedit">确认</el-button>
       </span>
       </template>
     </el-dialog>
@@ -251,13 +260,13 @@
     <div style="margin: 10px 0">
       <el-pagination
           :current-page="currentPage"
-          :page-size="10"
+          :page-size="pageSize"
           :page-sizes="[5, 10, 20]"
           background
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
+          @size-change="findSize"
+          @current-change="findPage"
       />
     </div>
 
@@ -266,16 +275,17 @@
 </template>
 
 <script lang="ts">
-
+import request from '../utils/request';
 export default {
   name: "productsTable",
-  cateid:'',
-  catename:'',
+  cateId:'',
+  cateName:'',
 
   data() {
     return {
       form:{},
-
+      tableData:[],
+      FilterTableData:[],
       addVisible : false,
       categoryVisible: false,
       EditVisible: false,
@@ -283,57 +293,28 @@ export default {
       search: '',
 
       currentPage: 1,
-
-      total: 10,
-
-      tableData: [
-        {
-          commodityID: 'asd',
-          productID: 'zxc',
-          category:'',
-          name:'',
-          number:'',
-          cost:'',
-          supplier:'',
-          status:'',
-          describe: 'No. 189, Grove St, Los Angeles',
-          price: '1000',
-        },
-
-        {
-          commodityID: 'asd',
-          productID: 'zxc',
-          category:'',
-          name:'',
-          number:'',
-          cost:'',
-          supplier:'',
-          status:'',
-          describe: 'No. 189, Grove St, Los Angeles',
-          price: '1000',
-        },
-
-      ],
+      pageSize: 10,
+      total: 0,
 
       options : [
         {
-          value: 'cat',
+          value: 'CATS',
           label: '宠物猫',
         },
         {
-          value: 'dog',
+          value: 'DOGS',
           label: '宠物狗',
         },
         {
-          value: 'bird',
+          value: 'BIRDS',
           label: '宠物鸟',
         },
         {
-          value: 'fish',
+          value: 'FISH',
           label: '宠物鱼',
         },
         {
-          value: 'reptile',
+          value: 'REPTILES',
           label: '宠物爬行类',
         },
       ]
@@ -342,15 +323,12 @@ export default {
     }
   },
 
+  created() {
+    this.load()
+  },
 
   methods: {
-    handleDel: '',
-
-    handleSizeChange() {
-
-    },
-
-    handleCurrentChange() {
+    handleDel(){
 
     },
 
@@ -364,8 +342,54 @@ export default {
 
     edit(){
       this.EditVisible=true
+    },
+
+    saveitem(){
+      console.log(this.form)
+      request.post("/item/add",this.form).then(res =>{
+        console.log(res)
+      })
+      this.addVisible=false
+    },
+
+    savecategory(){
+      console.log(this.form)
+      request.post("category/add",this.form).then(res =>{
+        console.log(res)
+      })
+      this.categoryVisible=false
+    },
+
+    saveedit(){
+      console.log(this.form)
+      request.post("/item/update",this.form).then(res =>{
+        console.log(res)
+      })
+      this.EditVisible=false
+    },
+
+    load() {
+      request.get('/item/get', {
+        params: {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          supplier: 1,
+          search: this.search,
+        }
+      }).then(resp => {
+        this.tableData = resp.data.records;
+        this.total = resp.data.total;
+      })
+    },
+
+    // handleSearch(){
+    //   let num=parseInt(this.search);
+    //   this.FilterTableData=this.tableData.filter((data)=>data.itemid===num)
+    // },
+
     }
-  }
+
+
 }
 
 </script>
@@ -375,6 +399,23 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 
+
+const currentPage = ref(4)
+
+const pageSize = ref(10)
+const small = ref(false)
+const background = ref(false)
+const disabled = ref(false)
+
+const findSize = (val: number) => {
+  console.log(`${val} items per page`)
+}
+const findPage = (val: number) => {
+  console.log(`current page: ${val}`)
+}
+
+
+// 图片
 import type { UploadProps } from 'element-plus'
 
 const imageUrl = ref('')

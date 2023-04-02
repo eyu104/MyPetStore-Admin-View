@@ -11,7 +11,7 @@ const handleSelect = (key, keyPath) => {
 <template>
   <div class="header">
     <el-affix :offset="0">
-      <div style="width: 75vw;">
+      <div style="width: 85vw;">
         <el-menu
             :default-active="activeIndex"
             mode="horizontal"

@@ -68,6 +68,7 @@
 </template>
 
 <script lang="ts">
+import request from '../utils/request'
 
 export default {
 
