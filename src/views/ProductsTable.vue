@@ -13,11 +13,11 @@
         />
       </el-select>
 
-      <el-input  v-model="search" placeholder="请输入产品ID" style="width: 200px;margin-left: 10px"></el-input>
+      <el-input  v-model="search" placeholder="请输入产品ID" style="width: 200px;margin-left: 10px" clearable></el-input>
 
       <el-button style="margin-left: 10px" @click="load">查询</el-button>
 
-      <el-button @click="addcategory" style="margin-left: 10px" >新增种类</el-button>
+<!--      <el-button @click="addcategory" style="margin-left: 10px" >新增种类</el-button>-->
 
       <el-button @click="add" style="margin-left: 10px">新增商品</el-button>
 
@@ -82,14 +82,21 @@
         <el-form-item label="图片" >
 
           <el-upload
-              class="avatar-uploader"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
+              v-model:file-list="fileList"
+              class="upload-demo"
+              :action="datas.host"
+              :before-upload="getPolicy"
+              :on-success="handleUploadSuccess"
+              :data="datas"
+              list-type="picture"
+
           >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+            <el-button type="default">上传图片</el-button>
+            <template #tip>
+              <div class="el-upload__tip">
+                图片大小不得大于500kb
+              </div>
+            </template>
           </el-upload>
 
         </el-form-item>
@@ -105,69 +112,56 @@
     </el-dialog>
 
 <!--   新增种类-->
-    <el-dialog v-model="categoryVisible" title="新增种类" width="30%">
-      <el-form :model="form" label-width="120px">
+<!--    <el-dialog v-model="categoryVisible" title="新增种类" width="30%">-->
+<!--      <el-form :model="form" label-width="120px">-->
 
-        <el-form-item label="cateid" >
-          <el-input v-model="form.cateId" style="width: 50%;"/>
-        </el-form-item>
+<!--        <el-form-item label="cateid" >-->
+<!--          <el-input v-model="form.cateId" style="width: 50%;"/>-->
+<!--        </el-form-item>-->
 
-        <el-form-item label="catename" >
-          <el-input v-model="form.cateName" style="width: 50%;"/>
-        </el-form-item>
+<!--        <el-form-item label="catename" >-->
+<!--          <el-input v-model="form.cateName" style="width: 50%;"/>-->
+<!--        </el-form-item>-->
 
-        <el-form-item label="图片" >
+<!--        <el-form-item label="图片" >-->
 
-          <el-upload
-              class="avatar-uploader"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-          </el-upload>
+<!--          <Tesr />-->
 
-        </el-form-item>
+<!--        </el-form-item>-->
+<!--        <Tesr />-->
 
-      </el-form>
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="categoryVisible = false">取消</el-button>
-        <el-button type="primary" @click="savecategory">确认</el-button>
-      </span>
-      </template>
-    </el-dialog>
+<!--      </el-form>-->
+<!--      <template #footer>-->
+<!--      <span class="dialog-footer">-->
+<!--        <el-button @click="categoryVisible = false">取消</el-button>-->
+<!--        <el-button type="primary" @click="savecategory">确认</el-button>-->
+<!--      </span>-->
+<!--      </template>-->
+<!--    </el-dialog>-->
 
 <!--    表格-->
-    <el-table :data="tableData" style="width: 100%" max-height="100vh" stripe border>
-      <el-table-column prop="itemId" label="商品ID" width="120" sortable/>
-      <el-table-column prop="productId" label="产品ID" width="120" sortable/>
-      <el-table-column prop="category" label="种类" width="120" />
-      <el-table-column prop="quantity" label="数量" width="60" />
-      <el-table-column prop="name" label="名称" width="120" />
-      <el-table-column prop="describe" label="产品描述" />
-      <el-table-column prop="attr1" label="商品描述" />
-      <el-table-column prop="supplier" label="供应商" width="180"/>
-      <el-table-column prop="status" label="状态" width="150"/>
-      <el-table-column prop="unitCost" label="成本" width="120"/>
-      <el-table-column prop="listPrice" label="价格" width="120" />
-      <el-table-column fixed="right" label="操作" width="180">
+    <el-table :data="tableData" style="width: 100%" max-height="70vh" stripe border>
+      <el-table-column prop="itemId" label="商品ID" width="100" sortable/>
+      <el-table-column prop="productId" label="产品ID" width="100" sortable/>
+      <el-table-column prop="category" label="种类" width="100" />
+      <el-table-column prop="quantity" label="数量" width="70" />
+      <el-table-column prop="name" label="名称" width="130" />
+      <el-table-column prop="descn" label="产品描述" />
+      <el-table-column prop="attr1" label="商品描述" width="130"/>
+      <el-table-column prop="supplier" label="供应商" width="80"/>
+      <el-table-column prop="status" label="状态" width="80"/>
+      <el-table-column prop="unitCost" label="成本" width="80"/>
+      <el-table-column prop="listPrice" label="价格" width="80" />
+      <el-table-column fixed="right" label="操作" width="170">
 
         <template #default="scope">
 
-          <el-button type="primary" @click="edit"  >编辑</el-button>
+          <el-button type="primary" @click="handleEdit(scope.row)">编辑</el-button>
 
-          <el-popconfirm
-              confirm-button-text="是"
-              cancel-button-text="否"
-              :icon="InfoFilled"
-              icon-color="#626AEF"
-              title="确定删除？"
-          >
+          <el-popconfirm title="确定删除？" @confirm="handleDel(scope.row.itemId)">
             <template #reference>
-              <el-button type="danger" @click="handleDel(scope.$index,scope.row)" >删除</el-button>
+              <el-button type="danger" >删除</el-button>
+<!--              <el-button type="danger" @click="handleDel(scope.$index, scope.row)" >删除</el-button>-->
             </template>
           </el-popconfirm>
 
@@ -176,7 +170,7 @@
     </el-table>
 
 <!--    编辑商品-->
-    <el-dialog v-model="EditVisible" title="编辑商品" width="30%">
+    <el-dialog v-model="editVisible" title="编辑商品" width="30%">
       <el-form model="form" label-width="120px">
 
         <el-form-item label="商品ID" >
@@ -230,27 +224,31 @@
           <el-input v-model="form.cost" style="width: 30%;"/>
         </el-form-item>
 
-
-        <el-form-item label="图片" >
-
+        <el-form-item label="图片">
           <el-upload
-              class="avatar-uploader"
-              action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload"
-          >
-            <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-          </el-upload>
+              v-model:file-list="fileList"
+              class="upload-demo"
+              :action="datas.host"
+              :before-upload="getPolicy"
+              :on-success="handleUploadSuccess"
+              :data="datas"
+              list-type="picture"
 
+          >
+            <el-button type="default">上传图片</el-button>
+            <template #tip>
+              <div class="el-upload__tip">
+                图片大小不得大于500kb
+              </div>
+            </template>
+          </el-upload>
         </el-form-item>
 
       </el-form>
 
       <template #footer>
       <span class="dialog-footer">
-        <el-button @click="EditVisible = false">取消</el-button>
+        <el-button @click="editVisible = false">取消</el-button>
         <el-button type="primary" @click="saveedit">确认</el-button>
       </span>
       </template>
@@ -265,8 +263,8 @@
           background
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
-          @size-change="findSize"
-          @current-change="findPage"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
       />
     </div>
 
@@ -284,12 +282,13 @@ export default {
   data() {
     return {
       form:{},
+      form2:{},
       tableData:[],
       FilterTableData:[],
       addVisible : false,
       categoryVisible: false,
-      EditVisible: false,
-
+      editVisible: false,
+      a:[],
       search: '',
 
       currentPage: 1,
@@ -319,7 +318,6 @@ export default {
         },
       ]
 
-
     }
   },
 
@@ -328,44 +326,78 @@ export default {
   },
 
   methods: {
-    handleDel(){
 
+
+    handleDel(itemId){
+      console.log(itemId)
+      request.delete(""+itemId).then(res =>{
+        if(res.code==='0')
+                {this.$message({
+                  type:'success',
+                  message:'删除成功'
+                })
+                  this.load();
+                }
+                else
+                {
+                  this.$message({
+                    type:'error',
+                    message:res.msg
+                  })
+                }
+      })
     },
 
     add(){
       this.addVisible=true
+      this.form={}
     },
 
-    addcategory(){
-      this.categoryVisible=true
-    },
-
-    edit(){
-      this.EditVisible=true
-    },
+    // addcategory(){
+    //   this.categoryVisible=true
+    // },
+    //
+    // savecategory(){
+    //   console.log(this.form)
+    //   request.post("category/add",this.form).then(res =>{
+    //     console.log(res)
+    //   })
+    //   this.categoryVisible=false
+    // },
 
     saveitem(){
       console.log(this.form)
       request.post("/item/add",this.form).then(res =>{
         console.log(res)
+        this.load()
       })
       this.addVisible=false
-    },
-
-    savecategory(){
-      console.log(this.form)
-      request.post("category/add",this.form).then(res =>{
-        console.log(res)
-      })
-      this.categoryVisible=false
     },
 
     saveedit(){
       console.log(this.form)
       request.post("/item/update",this.form).then(res =>{
         console.log(res)
+        this.load();
       })
-      this.EditVisible=false
+      this.editVisible=false
+    },
+
+
+    handleEdit(row){
+      this.form=JSON.parse(JSON.stringify(row));
+      console.log(this.form);
+      this.editVisible=true;
+    },
+
+    handleSizeChange(pageSize){
+      this.pageSize = pageSize
+      this.load()
+    },
+
+    handleCurrentChange(pageNum){
+      this.currentPage = pageNum
+      this.load()
     },
 
     load() {
@@ -377,15 +409,15 @@ export default {
           search: this.search,
         }
       }).then(resp => {
+        // var b=["",""]
         this.tableData = resp.data.records;
-        this.total = resp.data.total;
-      })
-    },
+        // b= this.tableData.descn.split(">");
+        // this.tableData.descn=b[1];
+        this.total=resp.data.total;
 
-    // handleSearch(){
-    //   let num=parseInt(this.search);
-    //   this.FilterTableData=this.tableData.filter((data)=>data.itemid===num)
-    // },
+      })
+
+    },
 
     }
 
@@ -399,10 +431,6 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 
-
-const currentPage = ref(4)
-
-const pageSize = ref(10)
 const small = ref(false)
 const background = ref(false)
 const disabled = ref(false)
@@ -414,29 +442,64 @@ const findPage = (val: number) => {
   console.log(`current page: ${val}`)
 }
 
-
 // 图片
-import type { UploadProps } from 'element-plus'
+// import request from '../utils/request'
+import uuid from '../utils/uuid'
+import { onMounted } from 'vue'
+const datas = ref({
+  OSSAccessKeyId: '',
+  policy: '',
+  signature: '',
+  key: '',
+  success_action_status: '200',
+  host: 'https://pstore-eyu104.oss-cn-guangzhou.aliyuncs.com',
+  dir: ''
+})
+const fileName = ref('')
+const id = ref('')
 
-const imageUrl = ref('')
+const fileList = ref([
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (
-    response,
-    uploadFile
-) => {
-  imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+])
+
+onMounted(()=>{
+  load()
+})
+
+
+const handleUploadSuccess = (res,file) => {
+  console.log('上传成功')
+  console.log(datas.value.host + '/' + sessionStorage.getItem('name'))
+  fileList.value.pop()
+  fileList.value.push({
+    name: file.name,
+    url: datas.value.host + '/' + sessionStorage.getItem('name')
+
+  })
+  load()
 }
 
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.type !== 'image/jpeg') {
-    ElMessage.error('Avatar picture must be JPG format!')
-    return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error('Avatar picture size can not exceed 2MB!')
-    return false
-  }
-  return true
+const load = () =>{
+  request.get('/oss/policy').then(res=>{
+    datas.value.policy = res.data.policy;
+    datas.value.dir = res.data.dir;
+    datas.value.host = res.data.host;
+    datas.value.signature = res.data.signature;
+    datas.value.OSSAccessKeyId = res.data.accessId;
+    datas.value.key = res.data.dir + getId() + '_' + "${filename}"
+  })
 }
+
+const getId = () => {
+  let id = uuid(4)
+  console.log(id)
+  return id
+}
+
+const getPolicy = (file) => {
+  sessionStorage.setItem("name",datas.value.key.replace("${filename}",file.name))
+}
+
 </script>
 
 
