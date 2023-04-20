@@ -1,10 +1,17 @@
 <script setup>
 import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
+import {accountStore} from "../stores/account";
+const account=accountStore()
 const activeIndex = ref('1')
 const handleSelect = (key, keyPath) => {
   activeIndex.value = key
   console.log(key, keyPath)
+}
+
+const loginReset = () => {
+  account.$reset()
+  localStorage.clear()
 }
 </script>
 
@@ -46,8 +53,8 @@ const handleSelect = (key, keyPath) => {
             </div>
 
             <div v-else>
-              <el-menu-item index="5-1">个人信息</el-menu-item>
-              <el-menu-item index="login" @click="account.$reset()">退出登录</el-menu-item>
+              <el-menu-item index="info">个人信息</el-menu-item>
+              <el-menu-item index="login" @click="loginReset" >退出登录</el-menu-item>
             </div>
           </el-sub-menu>
 

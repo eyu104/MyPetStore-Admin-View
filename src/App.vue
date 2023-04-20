@@ -1,7 +1,9 @@
 <script >
-
 export default {
   name:"App",
+  created() {
+    window.localStorage.clear()
+  }
 }
 
 </script>

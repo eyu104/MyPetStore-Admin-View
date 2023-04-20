@@ -417,7 +417,7 @@ export default {
       dialogVisible:false,
       dialogVisible1:false,
       search:'',
-      supplierId:1234,
+      supplierId:'',
       ruleForm:{
         orderId:1,
         username:'1',
@@ -465,7 +465,7 @@ export default {
         params:{
           pageNum:this.currentPage,
           pageSize:this.pageSize,
-          supplierId:1,
+          supplierId:window.localStorage.getItem("token"),
         }
       }).then(resp=>{
         console.log(resp);
@@ -499,8 +499,13 @@ export default {
       console.log(this.ruleForm);
       this.dialogVisible=true;
     },
-    handleDelete(){
-      request.post('/order/delete',this.ruleForm).then(resp=>{
+    handleDelete(row){
+      this.ruleForm=JSON.parse(JSON.stringify(row));
+      request.post('/order/delete',{
+        params:{
+          orderId: this.ruleForm.orderId
+        }
+      }).then(resp=>{
         if(resp.code==='0')
         {this.$message({
           type:'success',

@@ -405,7 +405,7 @@ export default {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
-          supplier: 1,
+          supplier: window.localStorage.getItem("token"),
           search: this.search,
         }
       }).then(resp => {
