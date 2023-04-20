@@ -59,7 +59,7 @@
           <el-button
               size="small"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
+              @click="handleDelete(scope.row)"
           >删除
           </el-button>
           <el-button type="small" @click="sendOut(scope.row)">
@@ -528,10 +528,9 @@ export default {
       this.dialogVisible=true;
     },
     handleDelete(row){
-      this.ruleForm=JSON.parse(JSON.stringify(row));
-      request.post('/order/delete',{
+      request.get('/order/delete',{
         params:{
-          orderId: this.ruleForm.orderId
+          orderId: row.orderId
         }
       }).then(resp=>{
         if(resp.code==='0')
