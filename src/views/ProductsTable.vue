@@ -4,14 +4,14 @@
 
     <div style="margin: 10px 0">
 
-      <el-select v-model="form.category" class="m-2" placeholder="展现种类" style="width: 120px">
-        <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-        />
-      </el-select>
+<!--      <el-select v-model="form.category" class="m-2" placeholder="展现种类" style="width: 120px">-->
+<!--        <el-option-->
+<!--            v-for="item in options"-->
+<!--            :key="item.value"-->
+<!--            :label="item.label"-->
+<!--            :value="item.value"-->
+<!--        />-->
+<!--      </el-select>-->
 
       <el-input  v-model="search" placeholder="请输入产品ID" style="width: 200px;margin-left: 10px" clearable></el-input>
 
@@ -82,14 +82,14 @@
         <el-form-item label="图片" >
 
           <el-upload
-              v-model:file-list="fileList"
+              v-model="form.fileName"
+              v-model:file-list="this.fileList"
               class="upload-demo"
-              :action="datas.host"
+              :action="this.datas.host"
               :before-upload="getPolicy"
               :on-success="handleUploadSuccess"
-              :data="datas"
+              :data="this.datas"
               list-type="picture"
-
           >
             <el-button type="default">上传图片</el-button>
             <template #tip>
@@ -161,7 +161,6 @@
           <el-popconfirm title="确定删除？" @confirm="handleDel(scope.row.itemId)">
             <template #reference>
               <el-button type="danger" >删除</el-button>
-<!--              <el-button type="danger" @click="handleDel(scope.$index, scope.row)" >删除</el-button>-->
             </template>
           </el-popconfirm>
 
@@ -226,14 +225,14 @@
 
         <el-form-item label="图片">
           <el-upload
-              v-model:file-list="fileList"
+
+              v-model:file-list="this.fileList"
               class="upload-demo"
-              :action="datas.host"
+              :action="this.datas.host"
               :before-upload="getPolicy"
               :on-success="handleUploadSuccess"
-              :data="datas"
+              :data="this.datas"
               list-type="picture"
-
           >
             <el-button type="default">上传图片</el-button>
             <template #tip>
@@ -274,15 +273,34 @@
 
 <script lang="ts">
 import request from '../utils/request';
+import uuid from '../utils/uuid'
 export default {
   name: "productsTable",
   cateId:'',
   cateName:'',
 
+  fileName:'',
+  id:'',
+  fileList:[],
+
   data() {
     return {
-      form:{},
-      form2:{},
+      form:{
+        commodityId:'',
+        productId:'',
+        category:'',
+        name:'',
+        quantity:'',
+        describe:'',
+        describe2:'',
+        supplier: '',
+        status:'',
+        price:'',
+        cost:'',
+        fileName: '',
+        url:''
+      },
+
       tableData:[],
       FilterTableData:[],
       addVisible : false,
@@ -295,6 +313,15 @@ export default {
       pageSize: 10,
       total: 0,
 
+      datas: {
+        OSSAccessKeyId: '',
+        policy: '',
+        signature: '',
+        key: '',
+        success_action_status: '200',
+        host: 'https://pstore-eyu104.oss-cn-guangzhou.aliyuncs.com',
+        dir: ''
+      },
       options : [
         {
           value: 'CATS',
@@ -318,6 +345,8 @@ export default {
         },
       ]
 
+
+
     }
   },
 
@@ -325,32 +354,33 @@ export default {
     this.load()
   },
 
+  mounted(){
+    this.loadp()
+  },
+
   methods: {
 
-
-    handleDel(itemId){
+    handleDel(itemId) {
       console.log(itemId)
-      request.delete(""+itemId).then(res =>{
-        if(res.code==='0')
-                {this.$message({
-                  type:'success',
-                  message:'删除成功'
-                })
-                  this.load();
-                }
-                else
-                {
-                  this.$message({
-                    type:'error',
-                    message:res.msg
-                  })
-                }
+      request.delete("" + itemId).then(res => {
+        if (res.code === '0') {
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+          this.load();
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.msg
+          })
+        }
       })
     },
 
-    add(){
-      this.addVisible=true
-      this.form={}
+    add() {
+      this.addVisible = true
+      this.form = {}
     },
 
     // addcategory(){
@@ -365,37 +395,37 @@ export default {
     //   this.categoryVisible=false
     // },
 
-    saveitem(){
+    saveitem() {
       console.log(this.form)
-      request.post("/item/add",this.form).then(res =>{
+      request.post("/item/add", this.form).then(res => {
         console.log(res)
         this.load()
       })
-      this.addVisible=false
+      this.addVisible = false
     },
 
-    saveedit(){
+    saveedit() {
       console.log(this.form)
-      request.post("/item/update",this.form).then(res =>{
+      request.post("/item/update", this.form).then(res => {
         console.log(res)
         this.load();
       })
-      this.editVisible=false
+      this.editVisible = false
     },
 
 
-    handleEdit(row){
-      this.form=JSON.parse(JSON.stringify(row));
+    handleEdit(row) {
+      this.form = JSON.parse(JSON.stringify(row));
       console.log(this.form);
-      this.editVisible=true;
+      this.editVisible = true;
     },
 
-    handleSizeChange(pageSize){
+    handleSizeChange(pageSize) {
       this.pageSize = pageSize
       this.load()
     },
 
-    handleCurrentChange(pageNum){
+    handleCurrentChange(pageNum) {
       this.currentPage = pageNum
       this.load()
     },
@@ -413,15 +443,50 @@ export default {
         this.tableData = resp.data.records;
         // b= this.tableData.descn.split(">");
         // this.tableData.descn=b[1];
-        this.total=resp.data.total;
+        this.total = resp.data.total;
 
       })
 
     },
 
-    }
+    //图片
+    getId() {
+      let id = uuid(4)
+      console.log(id)
+      return id
+    },
+
+    loadp() {
+      request.get('/oss/policy').then(res => {
+        this.datas.policy = res.data.policy;
+        this.datas.dir = res.data.dir;
+        this.datas.host = res.data.host;
+        this.datas.signature = res.data.signature;
+        this.datas.OSSAccessKeyId = res.data.accessId;
+        this.datas.key = res.data.dir + this.getId() + '_' + "${filename}"
+      })
+    },
+
+    handleUploadSuccess(res,file) {
+      console.log('上传成功')
+      console.log(this.datas.host + '/' + sessionStorage.getItem('name'))
+      this.fileList.pop()
+      this.fileList.push({
+        name: file.name,
+        url: this.datas.host + '/' + sessionStorage.getItem('name')
+
+      })
+      this.form.fileName=this.datas.host + '/' + sessionStorage.getItem('name')
+      this.loadp()
+    },
+
+    getPolicy(file) {
+      sessionStorage.setItem("name",this.datas.key.replace("${filename}",file.name))
+    },
 
 
+
+  }
 }
 
 </script>
@@ -440,64 +505,6 @@ const findSize = (val: number) => {
 }
 const findPage = (val: number) => {
   console.log(`current page: ${val}`)
-}
-
-// 图片
-// import request from '../utils/request'
-import uuid from '../utils/uuid'
-import { onMounted } from 'vue'
-const datas = ref({
-  OSSAccessKeyId: '',
-  policy: '',
-  signature: '',
-  key: '',
-  success_action_status: '200',
-  host: 'https://pstore-eyu104.oss-cn-guangzhou.aliyuncs.com',
-  dir: ''
-})
-const fileName = ref('')
-const id = ref('')
-
-const fileList = ref([
-
-])
-
-onMounted(()=>{
-  load()
-})
-
-
-const handleUploadSuccess = (res,file) => {
-  console.log('上传成功')
-  console.log(datas.value.host + '/' + sessionStorage.getItem('name'))
-  fileList.value.pop()
-  fileList.value.push({
-    name: file.name,
-    url: datas.value.host + '/' + sessionStorage.getItem('name')
-
-  })
-  load()
-}
-
-const load = () =>{
-  request.get('/oss/policy').then(res=>{
-    datas.value.policy = res.data.policy;
-    datas.value.dir = res.data.dir;
-    datas.value.host = res.data.host;
-    datas.value.signature = res.data.signature;
-    datas.value.OSSAccessKeyId = res.data.accessId;
-    datas.value.key = res.data.dir + getId() + '_' + "${filename}"
-  })
-}
-
-const getId = () => {
-  let id = uuid(4)
-  console.log(id)
-  return id
-}
-
-const getPolicy = (file) => {
-  sessionStorage.setItem("name",datas.value.key.replace("${filename}",file.name))
 }
 
 </script>
